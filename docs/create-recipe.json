@@ -1,0 +1,9 @@
+{
+  "title": "Овощной суп",
+  "ingredients": "Морковь — 1 шт.\nВода — 1 л",
+  "instructions": "Нарежьте овощи и варите 20 минут.",
+  "prep_time": 25,
+  "servings": 2,
+  "category": "Супы",
+  "is_favorite": false
+}

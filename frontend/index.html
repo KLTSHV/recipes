@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#294b3d">
+  <meta name="description" content="Личная коллекция рецептов: сохраняйте, редактируйте и готовьте любимые блюда.">
+  <title>По вкусу — книга рецептов</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">К рецептам</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./" aria-label="По вкусу, главная">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M7 17h18c0 6-3.8 10-9 10S7 23 7 17Z" stroke="currentColor" stroke-width="1.8"/><path d="M5 17h22M12 12c-3-3 3-4 0-7M20 12c-3-3 3-4 0-7M11 28h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <span>По вкусу<span class="brand-caption">Личная книга рецептов</span></span>
+      </a>
+      <span class="header-note">Сохранить. Приготовить. Повторить.</span>
+    </div>
+  </header>
+
+  <main id="main" class="main-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">ВАША КОЛЛЕКЦИЯ</p>
+        <h1 id="page-title">Хорошее начинается<br>с любимого рецепта.</h1>
+        <p class="intro-description">Все идеи для завтрака, обеда и ужина — в одном месте.</p>
+      </div>
+      <button id="new-recipe" class="button button-primary" type="button"><span aria-hidden="true">＋</span> Добавить рецепт</button>
+    </section>
+
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+    <section class="collection" aria-label="Коллекция рецептов">
+      <div class="toolbar">
+        <div class="search-field">
+          <label for="search" class="sr-only">Поиск по названию, ингредиентам или категории</label>
+          <span aria-hidden="true">⌕</span>
+          <input id="search" type="search" placeholder="Найти рецепт или ингредиент…" autocomplete="off">
+        </div>
+        <div class="tabs" role="group" aria-label="Фильтр избранного">
+          <button id="filter-all" class="tab active" aria-pressed="true" type="button">Все рецепты</button>
+          <button id="filter-favorites" class="tab" aria-pressed="false" type="button">☆ Избранное</button>
+        </div>
+        <label class="sr-only" for="category-filter">Фильтр по категории</label>
+        <select id="category-filter" aria-label="Категория"><option value="">Все категории</option></select>
+      </div>
+      <div class="list-heading">
+        <p id="recipe-count" aria-live="polite">Ваша коллекция</p>
+        <div class="list-controls">
+          <span id="loading" class="loading" role="status" hidden><span class="spinner" aria-hidden="true"></span><span id="loading-text">Загрузка…</span></span>
+          <button id="refresh" class="refresh-button" type="button"><span aria-hidden="true">↻</span> Обновить</button>
+        </div>
+      </div>
+      <div id="recipes" class="recipe-grid" aria-label="Список рецептов" aria-busy="true"></div>
+      <div id="empty-state" class="empty-state" hidden>
+        <span class="empty-symbol" aria-hidden="true">✦</span>
+        <h2 id="empty-title">Здесь начинается ваша книга рецептов</h2>
+        <p id="empty-description">Добавьте первое блюдо, которое хочется приготовить снова.</p>
+        <button id="empty-add" class="button button-primary" type="button">Добавить первый рецепт</button>
+        <button id="reset-filters" class="button button-secondary" type="button" hidden>Сбросить фильтры</button>
+      </div>
+    </section>
+    <footer class="site-footer"><span>Вкусные идеи заслуживают своего места.</span><span>Книга рецептов · CRUD</span></footer>
+  </main>
+
+  <dialog id="editor" class="dialog editor-dialog" aria-labelledby="editor-title">
+    <div class="dialog-heading"><div><p class="eyebrow">КНИГА РЕЦЕПТОВ</p><h2 id="editor-title">Новый рецепт</h2></div><button class="close-button" data-close="editor" type="button" aria-label="Закрыть форму">×</button></div>
+    <p class="form-hint">Поля со звёздочкой обязательны.</p>
+    <div id="form-error" class="notice notice-error" role="alert" hidden></div>
+    <form id="recipe-form">
+      <div class="form-field"><label for="title">Название рецепта *</label><input id="title" name="title" required maxlength="200" placeholder="Например, паста с томатами" autocomplete="off"></div>
+      <div class="form-row">
+        <div class="form-field"><label for="prep_time">Время, минуты *</label><input id="prep_time" name="prep_time" type="number" min="1" max="1440" step="1" required value="30"><small>От 1 до 1440 минут</small></div>
+        <div class="form-field"><label for="servings">Количество порций *</label><input id="servings" name="servings" type="number" min="1" max="50" step="1" required value="2"><small>От 1 до 50 порций</small></div>
+      </div>
+      <div class="form-field"><label for="category">Категория</label><input id="category" name="category" maxlength="50" list="categories" placeholder="Например, основные блюда" autocomplete="off"><datalist id="categories"><option value="Завтраки"><option value="Основные блюда"><option value="Супы"><option value="Салаты"><option value="Десерты"><option value="Напитки"></datalist></div>
+      <div class="form-field"><label for="ingredients">Ингредиенты *</label><textarea id="ingredients" name="ingredients" rows="4" required maxlength="4000" placeholder="Укажите продукты и количество, каждый с новой строки"></textarea><small>До 4000 символов</small></div>
+      <div class="form-field"><label for="instructions">Шаги приготовления *</label><textarea id="instructions" name="instructions" rows="5" required maxlength="10000" placeholder="Опишите, как приготовить блюдо"></textarea><small>До 10 000 символов</small></div>
+      <label class="checkbox-field" for="is_favorite"><input id="is_favorite" name="is_favorite" type="checkbox"> <span>Добавить в избранное</span></label>
+      <div class="dialog-actions"><button class="button button-secondary" data-close="editor" type="button">Отмена</button><button id="save-recipe" class="button button-primary" type="submit">Сохранить рецепт</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="details" class="dialog" aria-labelledby="details-title">
+    <div class="dialog-heading"><div><p class="eyebrow">ВАШ РЕЦЕПТ</p><h2 id="details-title"></h2></div><button class="close-button" data-close="details" type="button" aria-label="Закрыть рецепт">×</button></div>
+    <div id="details-content"></div>
+    <div class="dialog-actions"><button class="button button-secondary" data-close="details" type="button">Закрыть</button><button id="details-edit" class="button button-primary" type="button">Изменить рецепт</button></div>
+  </dialog>
+
+  <dialog id="delete-dialog" class="dialog delete-dialog" aria-labelledby="delete-title" aria-describedby="delete-description">
+    <div class="dialog-heading"><h2 id="delete-title">Удалить рецепт?</h2><button class="close-button" data-close="delete-dialog" type="button" aria-label="Отменить удаление">×</button></div>
+    <p id="delete-description">Рецепт будет удалён из вашей коллекции.</p>
+    <div id="delete-error" class="notice notice-error" role="alert" hidden></div>
+    <div class="dialog-actions"><button id="cancel-delete" class="button button-secondary" data-close="delete-dialog" type="button" autofocus>Оставить</button><button id="confirm-delete" class="button button-delete" type="button">Удалить</button></div>
+  </dialog>
+  <noscript><p class="noscript-message">Для работы с рецептами включите JavaScript в браузере.</p></noscript>
+</body>
+</html>

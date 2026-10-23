@@ -1,0 +1,62 @@
+# Можно выполнить в расширении REST Client для VS Code / HTTP Client IDE.
+# В recipeId укажите id, который сервер вернул после POST.
+@baseUrl = http://127.0.0.1:8000
+@recipeId = 1
+
+### Список → 200
+GET {{baseUrl}}/api/recipes
+
+### Одна запись → 200 или 404
+GET {{baseUrl}}/api/recipes/{{recipeId}}
+
+### Создание → 201 + Location
+POST {{baseUrl}}/api/recipes
+Content-Type: application/json
+
+{
+  "title": "Омлет",
+  "ingredients": "Яйца — 2 шт.\nМолоко — 50 мл",
+  "instructions": "Взбейте яйца с молоком. Обжарьте на сковороде.",
+  "prep_time": 10,
+  "servings": 1,
+  "category": "Завтраки",
+  "is_favorite": false
+}
+
+### Полное обновление → 200
+PUT {{baseUrl}}/api/recipes/{{recipeId}}
+Content-Type: application/json
+
+{
+  "title": "Омлет с зеленью",
+  "ingredients": "Яйца — 2 шт.\nМолоко — 50 мл\nУкроп — по вкусу",
+  "instructions": "Взбейте яйца с молоком и зеленью. Обжарьте на сковороде.",
+  "prep_time": 15,
+  "servings": 1,
+  "category": "Завтраки",
+  "is_favorite": false
+}
+
+### Частичное обновление → 200
+PATCH {{baseUrl}}/api/recipes/{{recipeId}}
+Content-Type: application/json
+
+{"is_favorite": true}
+
+### Ошибка валидации → 400
+PATCH {{baseUrl}}/api/recipes/{{recipeId}}
+Content-Type: application/json
+
+{"title": "", "prep_time": -5}
+
+### Некорректный JSON → 400
+POST {{baseUrl}}/api/recipes
+Content-Type: application/json
+
+{"title":
+
+### Неизвестный ID → 404
+GET {{baseUrl}}/api/recipes/999999
+
+### Удаление → 204 без тела; повторное удаление → 404
+DELETE {{baseUrl}}/api/recipes/{{recipeId}}
